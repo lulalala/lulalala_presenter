@@ -12,8 +12,15 @@ require 'fake_app/fake_app'
 
 require 'test/unit/rails/test_help'
 
+# The pages are server-rendered html, so no browser (or Capybara server) is needed.
+require 'capybara/rails'
+Capybara.default_driver = :rack_test
+
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
+
+  # Rails' system testing hook switches Capybara to selenium before each test.
+  setup { Capybara.current_driver = :rack_test }
 end
 
 module DatabaseDeleter
