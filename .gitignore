@@ -4,3 +4,4 @@ Gemfile.lock
 gemfiles/*.lock
 pkg/*
 log
+test/fake_app/tmp/

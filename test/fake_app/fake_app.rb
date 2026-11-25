@@ -11,10 +11,18 @@ ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:'
 
 module ActiveDecoratorTestApp
   class Application < Rails::Application
-    config.secret_token = '"confusion" will be my epitaph.'
+    config.secret_key_base = '"confusion" will be my epitaph.'
+    config.hosts.clear # Capybara requests www.example.com, which host authorization (Rails 6+) blocks
     config.session_store :cookie_store, key: '_myapp_session'
     config.active_support.deprecation = :log
     config.eager_load = false
+    # Routes are drawn inline below; with reloading on (this runs as 'development'),
+    # Rails would discard them after the first request.
+    if config.respond_to?(:enable_reloading=)
+      config.enable_reloading = false
+    else
+      config.cache_classes = true
+    end
     config.action_dispatch.show_exceptions = false
     config.root = File.dirname(__FILE__)
 
